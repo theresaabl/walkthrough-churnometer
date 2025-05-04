@@ -1,1 +1,9 @@
 *.ipynb
+X_test.csv
+Y_test.csv
+*Customer-Churn.csv
+core.Microsoft*
+core.mongo*
+core.python*
+env.py
+__pycache__/

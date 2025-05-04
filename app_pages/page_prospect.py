@@ -2,10 +2,7 @@ import streamlit as st
 import pandas as pd
 from src.data_management import load_telco_data, load_pkl_file
 from src.machine_learning.predictive_analysis_ui import (
-    predict_churn,
-    predict_tenure,
-    predict_cluster)
-
+    predict_churn)
 
 def page_prospect_body():
 
@@ -20,27 +17,27 @@ def page_prospect_body():
                       .to_list()
                       )
 
-    # load predict tenure files
-    version = 'v1'
-    tenure_pipe = load_pkl_file(
-        f"outputs/ml_pipeline/predict_tenure/{version}/clf_pipeline.pkl")
-    tenure_labels_map = load_pkl_file(
-        f"outputs/ml_pipeline/predict_tenure/{version}/label_map.pkl")
-    tenure_features = (pd.read_csv(f"outputs/ml_pipeline/predict_tenure/{version}/X_train.csv")
-                       .columns
-                       .to_list()
-                       )
+    # # load predict tenure files
+    # version = 'v1'
+    # tenure_pipe = load_pkl_file(
+    #     f"outputs/ml_pipeline/predict_tenure/{version}/clf_pipeline.pkl")
+    # tenure_labels_map = load_pkl_file(
+    #     f"outputs/ml_pipeline/predict_tenure/{version}/label_map.pkl")
+    # tenure_features = (pd.read_csv(f"outputs/ml_pipeline/predict_tenure/{version}/X_train.csv")
+    #                    .columns
+    #                    .to_list()
+    #                    )
 
-    # load cluster analysis files
-    version = 'v1'
-    cluster_pipe = load_pkl_file(
-        f"outputs/ml_pipeline/cluster_analysis/{version}/cluster_pipeline.pkl")
-    cluster_features = (pd.read_csv(f"outputs/ml_pipeline/cluster_analysis/{version}/TrainSet.csv")
-                        .columns
-                        .to_list()
-                        )
-    cluster_profile = pd.read_csv(
-        f"outputs/ml_pipeline/cluster_analysis/{version}/clusters_profile.csv")
+    # # load cluster analysis files
+    # version = 'v1'
+    # cluster_pipe = load_pkl_file(
+    #     f"outputs/ml_pipeline/cluster_analysis/{version}/cluster_pipeline.pkl")
+    # cluster_features = (pd.read_csv(f"outputs/ml_pipeline/cluster_analysis/{version}/TrainSet.csv")
+    #                     .columns
+    #                     .to_list()
+    #                     )
+    # cluster_profile = pd.read_csv(
+    #     f"outputs/ml_pipeline/cluster_analysis/{version}/clusters_profile.csv")
 
     st.write("### Prospect Churnometer Interface")
     st.info(
@@ -61,12 +58,12 @@ def page_prospect_body():
         churn_prediction = predict_churn(
             X_live, churn_features, churn_pipe_dc_fe, churn_pipe_model)
 
-        if churn_prediction == 1:
-            predict_tenure(X_live, tenure_features,
-                           tenure_pipe, tenure_labels_map)
+        # if churn_prediction == 1:
+        #     predict_tenure(X_live, tenure_features,
+        #                    tenure_pipe, tenure_labels_map)
 
-        predict_cluster(X_live, cluster_features,
-                        cluster_pipe, cluster_profile)
+        # predict_cluster(X_live, cluster_features,
+        #                 cluster_pipe, cluster_profile)
 
 
 def check_variables_for_UI(tenure_features, churn_features, cluster_features):
@@ -90,8 +87,9 @@ def DrawInputsWidgets():
     percentageMin, percentageMax = 0.4, 2.0
 
 # we create input widgets only for 6 features
-    col1, col2, col3, col4 = st.columns(4)
-    col5, col6, col7, col8 = st.columns(4)
+    # col1, col2, col3, col4 = st.columns(4)
+    # col5, col6, col7, col8 = st.columns(4)
+    col1, col2 = st.columns(2)
 
     # We are using these features to feed the ML pipeline - values copied from check_variables_for_UI() result
 
@@ -116,39 +114,39 @@ def DrawInputsWidgets():
         )
     X_live[feature] = st_widget
 
-    with col3:
-        feature = "MonthlyCharges"
-        st_widget = st.number_input(
-            label=feature,
-            min_value=df[feature].min()*percentageMin,
-            max_value=df[feature].max()*percentageMax,
-            value=df[feature].median()
-        )
-    X_live[feature] = st_widget
+    # with col3:
+    #     feature = "MonthlyCharges"
+    #     st_widget = st.number_input(
+    #         label=feature,
+    #         min_value=df[feature].min()*percentageMin,
+    #         max_value=df[feature].max()*percentageMax,
+    #         value=df[feature].median()
+    #     )
+    # X_live[feature] = st_widget
 
-    with col4:
-        feature = "PaymentMethod"
-        st_widget = st.selectbox(
-            label=feature,
-            options=df[feature].unique()
-        )
-    X_live[feature] = st_widget
+    # with col4:
+    #     feature = "PaymentMethod"
+    #     st_widget = st.selectbox(
+    #         label=feature,
+    #         options=df[feature].unique()
+    #     )
+    # X_live[feature] = st_widget
 
-    with col5:
-        feature = "OnlineBackup"
-        st_widget = st.selectbox(
-            label=feature,
-            options=df[feature].unique()
-        )
-    X_live[feature] = st_widget
+    # with col5:
+    #     feature = "OnlineBackup"
+    #     st_widget = st.selectbox(
+    #         label=feature,
+    #         options=df[feature].unique()
+    #     )
+    # X_live[feature] = st_widget
 
-    with col6:
-        feature = "PhoneService"
-        st_widget = st.selectbox(
-            label=feature,
-            options=df[feature].unique()
-        )
-    X_live[feature] = st_widget
+    # with col6:
+    #     feature = "PhoneService"
+    #     st_widget = st.selectbox(
+    #         label=feature,
+    #         options=df[feature].unique()
+    #     )
+    # X_live[feature] = st_widget
 
     # st.write(X_live)
 
